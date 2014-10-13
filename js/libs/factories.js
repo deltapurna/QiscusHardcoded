@@ -21,6 +21,6 @@ var factories = angular.module('qiscus.factories', []);
     /*
     setup factory for chrome api
     */
-    factories.factory('ch', ['$window', function() {
+    factories.factory('ch', ['$window', function($window) {
         return $window.chrome;
     }]);
