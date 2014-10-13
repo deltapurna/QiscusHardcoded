@@ -4,6 +4,7 @@ var qiscus = angular.module('qiscus', [
     'qiscus.providers',
     'qiscus.factories',
     'qiscus.services',
+    'ngRoute'
 ]);
 
 /*
@@ -15,7 +16,9 @@ qiscus.run(['$rootScope', '$injector', function($rootScope, $injector) {
     var hardcoded = $injector.get('QHardCoded');
     var login = $injector.get('QServiceLogin');
 
-    var email   = hardcoded.getUser();
+    debugger;
+    // var email   = hardcoded.getUser();
+    var email ="rajapulau@gmail.com";
     var pass    = hardcoded.getPassword();
 
     /*
@@ -27,6 +30,8 @@ qiscus.run(['$rootScope', '$injector', function($rootScope, $injector) {
         /*
         on request success
         */
+
+        debugger;
         loggedIn.success(function(data) {
 
             /*
