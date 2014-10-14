@@ -3,8 +3,7 @@
 qiscus.controller('OptionsController', [
 	'$q',
 	'$location',
-	'QHardCoded',
-	'ch', function($q, $location,qhardcoded, ch) {
+	'ch', function($q, $location, ch) {
 
 		this.roomId = '';
 		this.topicId = '';
