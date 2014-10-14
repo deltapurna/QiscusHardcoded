@@ -42,7 +42,7 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
         */
         ch.storage.sync.get(token_key, function(items) {
             if (items[token_key]) {
-                deferred.resolve(items.user_token);
+                deferred.resolve(items[token_key]);
             } else {//if not logged in -> token not set yet
                 deferred.reject('failed');
             }
@@ -58,7 +58,7 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
         $rootScope.token_value = token;
 
         var room = get_storage('room_id');
-        room.then(function(roomId) {
+        room.then(function(roomId) {            
             $location.path('/popup');
         }, function(msg) {
             $location.path('/options');
