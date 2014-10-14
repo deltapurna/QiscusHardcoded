@@ -13,7 +13,7 @@ var factories = angular.module('qiscus.factories', []);
     setup factory for pusher
     */
     factories.factory('pusher', function() {
-        return new Pusher('4c20f4052ecd7ffc6b0d', {
+        return new Pusher('896d049b53f1659213a2', {
             disableStats: true
         });
     });

@@ -12,5 +12,5 @@ var channel = pusher.subscribe('q3e15345b4cf332a0746ada7ee0752004b1qe2');
         if (notifs > 0) {
             chrome.browserAction.setBadgeText({text: notifs.toString()});
         }
-        
+
     });
