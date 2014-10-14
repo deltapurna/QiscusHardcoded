@@ -16,9 +16,14 @@ qiscus.config(function($routeProvider) {
             templateUrl: 'login.html',
             controller: 'LoginController'
         })
+        .when('/options', {
+            templateUrl: 'options.html',
+            controller: 'OptionsController'
+        })
         .when('/popup', {
             templateUrl: 'popup.html',
-            controller: 'ListCommentsController'
+            controller: 'ListCommentsController',
+            controllerAs: 'listComment'
         });
 });
 
@@ -29,14 +34,14 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
 
     var ch = $injector.get('ch');
 
-    var get_token = function(token_key) {
+    var get_storage = function(token_key) {
         var deferred = $q.defer();
 
         /*
         check if already has user_token
         */
         ch.storage.sync.get(token_key, function(items) {
-            if (items.user_token) {
+            if (items[token_key]) {
                 deferred.resolve(items.user_token);
             } else {//if not logged in -> token not set yet
                 deferred.reject('failed');
@@ -46,23 +51,20 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
         return deferred.promise;
     };
 
-
     chrome.browserAction.setBadgeText({text: ''});
-    var promise = get_token('user_token');
-    promise.then(function(token) {
+    var token = get_storage('user_token');
+    token.then(function(token) {
+
         $rootScope.token_value = token;
 
-        /*
-        watch token_value properties changes
-        trigger an event to broadcast to all child controllers
-        */
-        $rootScope.$watch('token_value', function(newVal, oldVal) {
-            if (newVal) {
-                $rootScope.$broadcast('this_token_value', newVal);
-            }
+        var room = get_storage('room_id');
+        room.then(function(roomId) {
+            $location.path('/popup');
+        }, function(msg) {
+            $location.path('/options');
         });
-        
-        $location.path('/popup');
+
+
     }, function(msg) {
         $location.path('/login');
     });

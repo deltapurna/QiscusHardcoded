@@ -19,7 +19,7 @@ qiscus.controller('LoginController', [
 					if (data.success == true) {
 						//sync token
 						ch.storage.sync.set({'user_token': data.token});
-            			console.log('logged in');
+            			$location.path('/popup');
 					}
 				});
 		};
