@@ -114,8 +114,14 @@ providers.provider('QHardCoded', function() {
             getRoom: function() {
                 return hardcoded.roomId;
             },
+            setRoom: function(roomId) {
+                hardcoded.roomId = roomId;
+            },
             getTopic: function() {
                 return hardcoded.topicId;
+            },
+            setTopic: function(topicId) {
+                hardcoded.topicId = topicId;
             },
             getUsername: function() {
                 return hardcoded.username;

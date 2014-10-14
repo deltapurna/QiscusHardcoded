@@ -1,11 +1,12 @@
 'use strict';
 
 qiscus.controller('LoginController', [
-	'$scope',	
+	'$scope',
+  	'$location',
 	'QServiceLogin',
 	'QHardCoded',
 	'QEndPoints',
-	'ch', function($scope, qlogin, qhardcoded, qendpoints, ch) {
+	'ch', function($scope, $location, qlogin, qhardcoded, qendpoints, ch) {
 
 		$scope.email = '';
 		$scope.password = '';
@@ -18,6 +19,7 @@ qiscus.controller('LoginController', [
 					if (data.success == true) {
 						//sync token
 						ch.storage.sync.set({'user_token': data.token});
+            			console.log('logged in');
 					}
 				});
 		};
