@@ -13,6 +13,9 @@ qiscus.controller('ListCommentsController', [
       var topic_id = '';
       var lastcomment_id = 100000;
 
+      var listComments = this;
+      listComments.comments = [];
+
       var get_storage = function(token_key) {
           var deferred = $q.defer();
 
@@ -57,14 +60,26 @@ qiscus.controller('ListCommentsController', [
           console.log(msg);
       });
 
-      var listComments = this;
-      listComments.comments = [];
       listComments.isMyComment = function(username){
         return hardcoded.getUsername() === username;
       };
 
         $scope.$on('commentData', function(event, data){
             listComments.comments.push(data);
+        });
+
+        $scope.$on('commentPusher', function(event, data) {
+            var converted = {
+                id: data.comment_id,
+                message: data.real_comment,
+                username_as: data.username,
+                username_real: data.username_real,
+                created_at: data.created_at,
+                deleted: false
+            };
+
+            listComments.comments.push(converted);
+            $scope.$apply();
         });
     }
 ]);

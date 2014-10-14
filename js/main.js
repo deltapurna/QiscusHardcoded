@@ -33,6 +33,7 @@ application main method
 qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $injector, $location, $q) {
 
     var ch = $injector.get('ch');
+    var pusher = $injector.get('pusher');
 
     var get_storage = function(token_key) {
         var deferred = $q.defer();
@@ -58,7 +59,7 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
         $rootScope.token_value = token;
 
         var room = get_storage('room_id');
-        room.then(function(roomId) {            
+        room.then(function(roomId) {
             $location.path('/popup');
         }, function(msg) {
             $location.path('/options');
@@ -68,5 +69,10 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
     }, function(msg) {
         $location.path('/login');
     });
+
+    var channel = pusher.subscribe('q3e15345b4cf332a0746ada7ee0752004b1qe2');
+        channel.bind('postcomment', function(data) {
+            $rootScope.$broadcast('commentPusher', data);
+        });
 
 }]);
