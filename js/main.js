@@ -60,7 +60,7 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
 
         var room = get_storage('room_id');
         room.then(function(roomId) {
-            $location.path('/options');
+            $location.path('/popup');
         }, function(msg) {
             $location.path('/options');
         });
