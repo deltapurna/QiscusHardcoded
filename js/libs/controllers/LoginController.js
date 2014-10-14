@@ -37,9 +37,10 @@ qiscus.controller('LoginController', [
 						};
 
 						var check_room = get_storage('room_id');
+						//sync token
+						ch.storage.sync.set({'user_token': data.token});
+						
 						check_room.then(function(room) {
-							//sync token
-							ch.storage.sync.set({'user_token': data.token});
 							$location.path('/popup');
 						}, function(msg) {
 							$location.path('/options');
