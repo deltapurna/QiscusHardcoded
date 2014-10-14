@@ -3,10 +3,9 @@
 qiscus.controller('LoginController', [
 	'$scope',
 	'QServiceLogin',
-	'QServiceToken',
 	'QHardCoded',
 	'QEndPoints',
-	'ch', function($scope, qlogin, qtoken, qhardcoded, qendpoints, ch) {
+	'ch', function($scope, qlogin, qhardcoded, qendpoints, ch) {
 
 		$scope.email = '';
 		$scope.password = '';
