@@ -18,7 +18,7 @@ qiscus.config(function($routeProvider) {
         })
         .when('/popup', {
             templateUrl: 'popup.html',
-            controller: 'ListCommentsController'            
+            controller: 'ListCommentsController'
         });
 });
 
@@ -51,6 +51,17 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
     var promise = get_token('user_token');
     promise.then(function(token) {
         $rootScope.token_value = token;
+
+        /*
+        watch token_value properties changes
+        trigger an event to broadcast to all child controllers
+        */
+        $rootScope.$watch('token_value', function(newVal, oldVal) {
+            if (newVal) {
+                $rootScope.$broadcast('this_token_value', newVal);
+            }
+        });
+        
         $location.path('/popup');
     }, function(msg) {
         $location.path('/login');
