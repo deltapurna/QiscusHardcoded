@@ -18,7 +18,7 @@ qiscus.config(function($routeProvider) {
         })
         .when('/popup', {
             templateUrl: 'popup.html',
-            controller: 'ListCommentsController'
+            controller: 'ListCommentsController'            
         });
 });
 
@@ -27,9 +27,6 @@ application main method
 */
 qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $injector, $location, $q) {
 
-    var endpoints = $injector.get('QEndPoints');
-    var hardcoded = $injector.get('QHardCoded');
-    var login = $injector.get('QServiceLogin');
     var ch = $injector.get('ch');
 
     var get_token = function(token_key) {
@@ -53,8 +50,10 @@ qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $
     chrome.browserAction.setBadgeText({text: ''});
     var promise = get_token('user_token');
     promise.then(function(token) {
-        console.log(token);
+        $rootScope.token_value = token;
+        $location.path('/popup');
     }, function(msg) {
         $location.path('/login');
     });
+
 }]);
