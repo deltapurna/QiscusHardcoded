@@ -27,40 +27,44 @@ application main method
 */
 qiscus.run(['$rootScope', '$injector', '$location' ,'$q', function($rootScope, $injector, $location, $q) {
 
-    var endpoints = $injector.get('QEndPoints');
-    var hardcoded = $injector.get('QHardCoded');
-    var login = $injector.get('QServiceLogin');
     var ch = $injector.get('ch');
 
-    var deferred = $q.defer();
+    var get_token = function(token_key) {
+        var deferred = $q.defer();
 
-    /*
-    check if already has user_token
-    */
-    ch.storage.sync.get('user_token', function(items) {
-        if (items.user_token) {
+        /*
+        check if already has user_token
+        */
+        ch.storage.sync.get(token_key, function(items) {
+            if (items.user_token) {
+                deferred.resolve(items.user_token);
+            } else {//if not logged in -> token not set yet
+                deferred.reject('failed');
+            }
+        });
 
-            //set to $rootScope
-            $rootScope.token_value = data.token;
+        return deferred.promise;
+    };
 
-            /*
-            watch token_value properties changes
-            trigger an event to broadcast to all child controllers
-            */
-            $rootScope.$watch('token_value', function(newVal, oldVal) {
-                if (newVal) {
-                    $rootScope.$broadcast('this_token_value', newVal);
-                }
-            });
-
-            deferred.resolve('logged in');
-
-        } else {//if not logged in -> token not set yet
-            deferred.reject('not logged in');
-        }
-    });
 
     chrome.browserAction.setBadgeText({text: ''});
-    console.log(deferred);
+    var promise = get_token('user_token');
+    promise.then(function(token) {
+        $rootScope.token_value = token;
+
+        /*
+        watch token_value properties changes
+        trigger an event to broadcast to all child controllers
+        */
+        $rootScope.$watch('token_value', function(newVal, oldVal) {
+            if (newVal) {
+                $rootScope.$broadcast('this_token_value', newVal);
+            }
+        });
+        
+        $location.path('/popup');
+    }, function(msg) {
+        $location.path('/login');
+    });
 
 }]);
