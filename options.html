@@ -5,9 +5,11 @@
           <span class="glyphicon glyphicon-comment"></span> Qiscus Hardcoded
           <a class="nav-back" href="#/popup"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-controller="ListRoomsController as listRooms">
             <label for="input-room-id">Room ID</label>
-            <input id="input-room-id" type="text" ng-model="options.roomId" class="form-control" required="">
+            <select id="input-room-id" ng-model="listRooms.roomIndex" ng-change="listRooms.updateRoomOption(options)" class="form-control">
+              <option value="{{$index}}" ng-repeat="room in listRooms.rooms">{{room.name}}</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="input-topic-id">Topic ID</label>

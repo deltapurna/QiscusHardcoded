@@ -21,7 +21,7 @@ services.service('QServiceRoom', ['QHttp', function(qhttp) {
     /*
      * get list of rooms
      */
-    this.getListComments = function(token) {
+    this.getListRooms = function(token) {
         qhttp.setUrl(url+"?token="+token);
 
         var connection = qhttp.connect('GET');

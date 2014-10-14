@@ -1,15 +1,23 @@
 'use strict';
 
 qiscus.controller('ListRoomsController', [
-    '$scope',
     '$q',
     'QEndPoints',
-    'QHardCoded',
-    'QServiceComment',
+    'QServiceRoom',
     'ch',
 
-    function($scope, $q, endpoint, hardcoded, comment, ch) {
+    function($q, endpoint, room, ch) {
       var url;
+      var listRooms = this;
+
+      listRooms.rooms = [];
+      listRooms.roomIndex = '';
+      listRooms.updateRoomOption = function(options) {
+        var room = listRooms.rooms[listRooms.roomIndex];
+        options.roomId = room.id;
+        options.codeEn = room.code_en;
+        options.topicId = room.last_topic_id;
+      };
 
       var get_storage = function(token_key) {
           var deferred = $q.defer();
@@ -28,37 +36,26 @@ qiscus.controller('ListRoomsController', [
           return deferred.promise;
       };
 
-      var check_topic = get_storage('topic_id');
-      check_topic.then(function(topic) {
-          url = 'http://qiscus-staging.herokuapp.com/api/v1/mobile/topic/' + topic + '/comment/' + lastcomment_id + '/token/';
+      var token = get_storage('user_token');
+      token.then(function(token) {
+          url = endpoint.getListRoomsUrl();
+          room.setUrl(url);
 
-          comment.setUrl(url);
+          var getRooms = room.getListRooms(token);
 
-          var getComments = comment.getListComments($scope.token_value, topic_id, lastcomment_id);
-
-          getComments.success(function(data) {
+          getRooms.success(function(data) {
             if (data.error) {
               console.log('error bro!');
               console.log(data);
             }
             else {
               console.log('successfully retrieve');
-              // console.log(data);
-              listComments.comments = data.results.comments;
+              console.log(data);
+              listRooms.rooms = data.results.rooms;
             }
           });
       }, function(msg) {
-          console.log(msg);
+        console.log(msg);
       });
-
-      var listComments = this;
-      listComments.comments = [];
-      listComments.isMyComment = function(username){
-        return hardcoded.getUsername() === username;
-      };
-
-        $scope.$on('commentData', function(event, data){
-            listComments.comments.push(data);
-        });
     }
 ]);
