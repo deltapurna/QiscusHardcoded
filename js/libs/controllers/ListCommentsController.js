@@ -31,24 +31,28 @@ qiscus.controller('ListCommentsController', [
       };
 
       var check_topic = get_storage('topic_id');
+      var check_token = get_storage('user_token');
+
       check_topic.then(function(topic) {
-          url = 'http://qiscus-staging.herokuapp.com/api/v1/mobile/topic/' + topic + '/comment/' + lastcomment_id + '/token/';
 
-          comment.setUrl(url);
+          check_token.then(function(token) {
+              url = 'http://qiscus-staging.herokuapp.com/api/v1/mobile/topic/' + topic + '/comment/' + lastcomment_id + '/token/';
+              comment.setUrl(url);
+              var getComments = comment.getListComments(token, topic_id, lastcomment_id);
 
-          var getComments = comment.getListComments($scope.token_value, topic_id, lastcomment_id);
-
-          getComments.success(function(data) {
-            if (data.error) {
-              console.log('error bro!');
-              console.log(data);
-            }
-            else {
-              console.log('successfully retrieve');
-              // console.log(data);
-              listComments.comments = data.results.comments;
-            }
+              getComments.success(function(data) {
+                if (data.error) {
+                  console.log('error bro!');
+                  console.log(data);
+                }
+                else {
+                  console.log('successfully retrieve');
+                  // console.log(data);
+                  listComments.comments = data.results.comments;
+                }
+              });
           });
+
       }, function(msg) {
           console.log(msg);
       });
