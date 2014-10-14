@@ -1,7 +1,7 @@
 'use strict';
 
 qiscus.controller('LoginController', [
-	'$scope',
+	'$scope',	
 	'QServiceLogin',
 	'QHardCoded',
 	'QEndPoints',
