@@ -23,7 +23,7 @@ qiscus.controller('CommentController', [
             var url = endpoint.getPostCommentUrl();
             var topic_id = '';
 
-            var token = $scope.token_value;
+            var token = '';
             var message = _this.message;
 
             var get_storage = function(token_key) {
@@ -44,40 +44,46 @@ qiscus.controller('CommentController', [
             };
 
             var check_topic = get_storage('topic_id');
+            var check_token = get_storage('user_token');
+
             check_topic.then(function(topic) {
 
-                /*
-                send chat message to server
-                */
-                comment.setUrl(url);
-                var chat = comment.postComment(message, token, topic);
+                check_token.then(function(token) {
 
                     /*
-                    on error authorization
+                    send chat message to server
                     */
-                    chat.success(function(data) {
-                        if (data.error) {
-                            alert('error authorization.');
-                        }
-                        var dataComment = {
-                          id: data.comment_id,
-                          message: data.message,
-                          username_as: hardcoded.getUsername(),
-                          created_at: data.sent
-                        };
+                    comment.setUrl(url);
+                    var chat = comment.postComment(message, token, topic);
 
-                        $scope.$emit('commentData', dataComment);
-                    });
+                        /*
+                        on error authorization
+                        */
+                        chat.success(function(data) {
+                            if (data.error) {
+                                alert('error authorization.');
+                            }
+                            var dataComment = {
+                              id: data.comment_id,
+                              message: data.message,
+                              username_as: hardcoded.getUsername(),
+                              created_at: data.sent
+                            };
 
-                    /*
-                    based error status code
-                    */
-                    chat.error(function(data) {
-                        alert('this is real error.');
-                    });
+                            $scope.$emit('commentData', dataComment);
+                        });
 
-                //clean up message
-                _this.message = '';
+                        /*
+                        based error status code
+                        */
+                        chat.error(function(data) {
+                            alert('this is real error.');
+                        });
+
+                    //clean up message
+                    _this.message = '';
+
+                });
 
             }, function(msg) {
                 console.log('error post comment : ' + msg);
