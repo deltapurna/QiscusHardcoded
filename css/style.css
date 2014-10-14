@@ -8,6 +8,27 @@ small {
   padding-right: 0;
   padding-left: 0;
 }
+
+.nav-back
+{
+  color: #71cd9d;
+}
+
+.nav-back:hover
+{
+  color: #f0ad4e;
+}
+
+.nav-options
+{
+  color: #fff;
+}
+
+.nav-options:hover
+{
+  color: #f0ad4e;
+}
+
 .chat
 {
   list-style: none;
